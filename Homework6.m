@@ -20,5 +20,6 @@ objquad = fitcdiscr(score(:,10), G, 'discrimtype', 'quadratic');
 load fisheriris
 fitcdiscr(meas, species)
 length(species)
+%ignore this
 obj = fitcdiscr(meas, species, 'discrimtype', 'linear');
 [label, score, cost] = predict(obj, meas);
