@@ -9,10 +9,10 @@ figure; %plotted the cumulative sum of the variance explained
 stairs(cumsum(latent)/sum(latent));
 xlabel('number of PCs')
 ylabel('cumulative sum of the variance explained')
-title('Cumulative Sum of Variance by number of PCs')
+title('Cumulative Sum of Variance by number of PCs
 variance = cumsum(latent)/sum(latent); 
 max(find(variance < 0.95)) %number of PCs needed to explain 95% of data (~52) 
-%c and d
+%c
 linearvec = zeros(1,400); %empty vector for LDA, QDA, and decision tree respectively
 quadraticvec = zeros(1,400);
 decisiontreevec = zeros(1, 400);
@@ -36,12 +36,22 @@ for i = 1:400
     temptree = mean(treepredict' == G(test));
     decisiontreevec(i) = temptree;
 end;
-mean(linearvec) %mean of 400 runs of the LDA, final cv accuracy is ~97 percent
-mean(quadraticvec) %mean of 400 runs of QDA, final cv accuracy is ~85 percent
-mean(decisiontreevec) %mean of 400 runs of decision tree, final cv accuracy is ~76 percent
+mean(linearvec) %mean of 400 runs of the LDA, final cv accuracy is 
+mean(quadraticvec)
+mean(decisiontreevec)
 view(treefit, 'mode', 'graph')
+%% I don't understand this but it seems to work
+obj = fitcdiscr(score(:, 10), G, 'discrimtype', 'linear');
+[label, scorelin, cost] = predict(obj, score(:,10))
+%quadratic analysis
+objquad = fitcdiscr(score(:,10), G, 'discrimtype', 'quadratic');
+[labelquad, scorequad, costquad] = predict(objquad, score(:,10));
+%used this model
+obj = fitcdiscr(meas, species, 'discrimtype', 'linear');
+[label, score, cost] = predict(obj, meas);
+%d
 %% 2
-load ('fisheriris')
+load fisheriris
 %a
 length(species) %number of flowers in the dataset
 meastable = array2table(meas)
