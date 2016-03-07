@@ -9,10 +9,10 @@ figure; %plotted the cumulative sum of the variance explained
 stairs(cumsum(latent)/sum(latent));
 xlabel('number of PCs')
 ylabel('cumulative sum of the variance explained')
-title('Cumulative Sum of Variance by number of PCs
+title('Cumulative Sum of Variance by number of PCs')
 variance = cumsum(latent)/sum(latent); 
 max(find(variance < 0.95)) %number of PCs needed to explain 95% of data (~52) 
-%c
+%c and d
 linearvec = zeros(1,400); %empty vector for LDA, QDA, and decision tree respectively
 quadraticvec = zeros(1,400);
 decisiontreevec = zeros(1, 400);
@@ -36,51 +36,38 @@ for i = 1:400
     temptree = mean(treepredict' == G(test));
     decisiontreevec(i) = temptree;
 end;
-mean(linearvec) %mean of 400 runs of the LDA, final cv accuracy is 
-mean(quadraticvec)
-mean(decisiontreevec)
+mean(linearvec) %mean of 400 runs of the LDA, final cv accuracy is ~97 percent
+mean(quadraticvec) %mean of 400 runs of QDA, final cv accuracy is ~85 percent
+mean(decisiontreevec) %mean of 400 runs of decision tree, final cv accuracy is ~76 percent
 view(treefit, 'mode', 'graph')
-%% I don't understand this but it seems to work
-obj = fitcdiscr(score(:, 10), G, 'discrimtype', 'linear');
-[label, scorelin, cost] = predict(obj, score(:,10))
-%quadratic analysis
-objquad = fitcdiscr(score(:,10), G, 'discrimtype', 'quadratic');
-[labelquad, scorequad, costquad] = predict(objquad, score(:,10));
-%used this model
-obj = fitcdiscr(meas, species, 'discrimtype', 'linear');
-[label, score, cost] = predict(obj, meas);
-%d
 %% 2
-load fisheriris
+load ('fisheriris')
 %a
-length(species) %number of flowers in the dataset
-meastable = array2table(meas)
-width(meastable) %number of measurements
+length(species) %number of flowers in the dataset (150 flowers)
+width(array2table(meas))%number of measurements (4 measurements) 
 fitcdiscr(meas, species) %species under class names: setosa, versicolor, virginica
 %b
-rng(1); % For reproducibility
-[idx,C] = kmeans(meas,2);
-coeff = pca(meas)
+[coeffiris, scoreiris, latentiris] = pca(meas); %pca data for plots
+[idx2, C] = kmeans(meas, 2); %used kmeans to sort meas into 2 clusters
 figure;
-plot(meas(:,1),meas(:,2),'k*','MarkerSize',5);
-title 'Fisher''s Iris Data';
-xlabel 'Petal Lengths (cm)';
-ylabel 'Petal Widths (cm)';
+gscatter(scoreiris(:, 1), scoreiris(:,2), idx2); %plotted scores using idx
+title('Fishers Iris Data in 2 Clusters');
+legend('cluster1', 'cluster2');
 
-rng(1); % For reproducibility
-[idx,C] = kmeans(meas,3);
-coeff = pca(meas)
+[idx3, C] = kmeans(meas, 3); %used kmeans to sort meas into 3 clusters
 figure;
-plot(X(:,1),X(:,2),'k*','MarkerSize',5);
-title 'Fisher''s Iris Data';
-xlabel 'Petal Lengths (cm)';
-ylabel 'Petal Widths (cm)';
+gscatter(scoreiris(:, 1), scoreiris(:,2), idx3); %plotted scores using idx
+title('Fishers Iris Data in 3 Clusters');
+legend('cluster1', 'cluster2', 'cluster3');
 
-rng(1); % For reproducibility
-[idx,C] = kmeans(meas,4);
-coeff = pca(meas)
+[idx4, C] = kmeans(meas, 4); %used kmeans to sort meas into 4 clusters
 figure;
-plot(X(:,1),X(:,2),'k*','MarkerSize',5);
-title 'Fisher''s Iris Data';
-xlabel 'Petal Lengths (cm)';
-ylabel 'Petal Widths (cm)';
+gscatter(scoreiris(:, 1), scoreiris(:,2), idx4); %plotted scores using idx
+title('Fishers Iris Data in 4 Clusters');
+legend('cluster1', 'cluster2', 'cluster3', 'cluster4');
+%c
+%One method to try is the elbow method, which looks at the percent of
+%variance explained as a function of the number of clusters. The point
+%where the marginal gain begins to drop would be the number of clusters to
+%use.
+%% 3

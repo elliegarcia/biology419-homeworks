@@ -43,34 +43,31 @@ view(treefit, 'mode', 'graph')
 %% 2
 load ('fisheriris')
 %a
-length(species) %number of flowers in the dataset
-meastable = array2table(meas)
-width(meastable) %number of measurements
+length(species) %number of flowers in the dataset (150 flowers)
+width(array2table(meas))%number of measurements (4 measurements) 
 fitcdiscr(meas, species) %species under class names: setosa, versicolor, virginica
 %b
-rng(1); % For reproducibility
-[idx,C] = kmeans(meas,2);
-coeff = pca(meas)
+[coeffiris, scoreiris, latentiris] = pca(meas); %pca data for plots
+[idx2, C] = kmeans(meas, 2); %used kmeans to sort meas into 2 clusters
 figure;
-plot(meas(:,1),meas(:,2),'k*','MarkerSize',5);
-title 'Fisher''s Iris Data';
-xlabel 'Petal Lengths (cm)';
-ylabel 'Petal Widths (cm)';
+gscatter(scoreiris(:, 1), scoreiris(:,2), idx2); %plotted scores using idx
+title('Fishers Iris Data in 2 Clusters');
+legend('cluster1', 'cluster2');
 
-rng(1); % For reproducibility
-[idx,C] = kmeans(meas,3);
-coeff = pca(meas)
+[idx3, C] = kmeans(meas, 3); %used kmeans to sort meas into 3 clusters
 figure;
-plot(X(:,1),X(:,2),'k*','MarkerSize',5);
-title 'Fisher''s Iris Data';
-xlabel 'Petal Lengths (cm)';
-ylabel 'Petal Widths (cm)';
+gscatter(scoreiris(:, 1), scoreiris(:,2), idx3); %plotted scores using idx
+title('Fishers Iris Data in 3 Clusters');
+legend('cluster1', 'cluster2', 'cluster3');
 
-rng(1); % For reproducibility
-[idx,C] = kmeans(meas,4);
-coeff = pca(meas)
+[idx4, C] = kmeans(meas, 4); %used kmeans to sort meas into 4 clusters
 figure;
-plot(X(:,1),X(:,2),'k*','MarkerSize',5);
-title 'Fisher''s Iris Data';
-xlabel 'Petal Lengths (cm)';
-ylabel 'Petal Widths (cm)';
+gscatter(scoreiris(:, 1), scoreiris(:,2), idx4); %plotted scores using idx
+title('Fishers Iris Data in 4 Clusters');
+legend('cluster1', 'cluster2', 'cluster3', 'cluster4');
+%c
+%One method to try is the elbow method, which looks at the percent of
+%variance explained as a function of the number of clusters. The point
+%where the marginal gain begins to drop would be the number of clusters to
+%use.
+%% 3
