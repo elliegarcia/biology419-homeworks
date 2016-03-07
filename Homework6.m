@@ -71,3 +71,7 @@ legend('cluster1', 'cluster2', 'cluster3', 'cluster4');
 %where the marginal gain begins to drop would be the number of clusters to
 %use.
 %% 3
+%DBSCAN is a clustering method that uses a density based clustering
+%algotherim. It randomly selects a point (A) and if A is sufficiently close
+%to multiple other points than it marks A as a "core point", otherwise it
+%marks A as "noise".
