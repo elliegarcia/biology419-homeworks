@@ -47,7 +47,7 @@ length(species) %number of flowers in the dataset (150 flowers)
 width(array2table(meas))%number of measurements (4 measurements) 
 fitcdiscr(meas, species) %species under class names: setosa, versicolor, virginica
 %b
-[coeffiris, scoreiris, latentiris] = pca(meas); %pca data for plots
+[coeffiris, scoreiris, latentiris] = pca(meas); %pca'ed the data for plots
 [idx2, C] = kmeans(meas, 2); %used kmeans to sort meas into 2 clusters
 figure;
 gscatter(scoreiris(:, 1), scoreiris(:,2), idx2); %plotted scores using idx
@@ -74,4 +74,29 @@ legend('cluster1', 'cluster2', 'cluster3', 'cluster4');
 %DBSCAN is a clustering method that uses a density based clustering
 %algotherim. It randomly selects a point (A) and if A is sufficiently close
 %to multiple other points than it marks A as a "core point", otherwise it
-%marks A as "noise".
+%marks A as "noise". A group of core points within a certain distance make
+%up a cluster, all the remaining points are considered noise.
+%c
+data = load('/Users/esteligarcia/Documents/MATLAB/YPML110 DBSCAN Clustering/DBSCAN Clustering/mydata.mat');
+X = data.X;
+epsilon = 0.5;
+MinPts = 10; %set minimum number of points for a cluster
+IDX = DBSCAN(X,epsilon,MinPts); %run DBSCAN algorithm
+PlotClusterinResult(X, IDX); %plotted
+title(['DBSCAN Clustering (\epsilon = ' num2str(epsilon) ', MinPts = '...
+    num2str(MinPts) ')']);
+
+[coeffX, scoreX, latentX] = pca(X) %pca'ed the data for plots
+[idx, C] = kmeans(X, 2); %set 2 clusters using kmeans
+figure;
+gscatter(scoreX(:, 1), scoreX(:,2), idx); %plotted
+%Key Differences: The DBSCAN algorithm recognized that the half-donut
+%cluster and the circle inside were seperate clusters. On the other hand,
+%the kmeans algorithm did not recognize them as seperate and instead tried
+%to set a straight line somewhere between the data points.
+%d
+%DBSCAN works better for seperating clusters that may not have a straight
+%line between them, like donut shaped clusters. Kmeans does not have the
+%capacity to recognize those clusters. However, Kmeans is a better option
+%if the data does have a linear divide and the user knows how many clusters
+%the data should have.
