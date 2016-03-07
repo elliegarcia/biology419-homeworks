@@ -1,3 +1,4 @@
+%% Quick reminder to Cooper that I used my 2 day extension, and I got an additional extension b/c my first draft got erased
 %% 1
 load('/Users/esteligarcia/Documents/MATLAB/Biology 419/CancerMicroarray.mat')
 %a
@@ -82,21 +83,27 @@ X = data.X;
 epsilon = 0.5;
 MinPts = 10; %set minimum number of points for a cluster
 IDX = DBSCAN(X,epsilon,MinPts); %run DBSCAN algorithm
+figure;
 PlotClusterinResult(X, IDX); %plotted
 title(['DBSCAN Clustering (\epsilon = ' num2str(epsilon) ', MinPts = '...
     num2str(MinPts) ')']);
 
-[coeffX, scoreX, latentX] = pca(X) %pca'ed the data for plots
+[coeffX, scoreX, latentX] = pca(X); %pca'ed the data for plots
 [idx, C] = kmeans(X, 2); %set 2 clusters using kmeans
 figure;
 gscatter(scoreX(:, 1), scoreX(:,2), idx); %plotted
+legend('cluster1', 'cluster2');
+title('mydata in 2 clusters using kmeans');
 %Key Differences: The DBSCAN algorithm recognized that the half-donut
 %cluster and the circle inside were seperate clusters. On the other hand,
 %the kmeans algorithm did not recognize them as seperate and instead tried
 %to set a straight line somewhere between the data points.
 %d
 %DBSCAN works better for seperating clusters that may not have a straight
-%line between them, like donut shaped clusters. Kmeans does not have the
-%capacity to recognize those clusters. However, Kmeans is a better option
-%if the data does have a linear divide and the user knows how many clusters
-%the data should have.
+%line between them, like donut shaped clusters. It is also better if the
+%user does not know how many clusters the data has. However, Kmeans is a
+%better option if the data has a linear divide and if the user knows how
+%many clusters the data should have.
+%I spent ~10 hours on this homework. Part of the reason is that I lost the
+%changes I made to the original version of the homework, so I had to start
+%over. Mary Chang and Linnea Pearson helped me redo my homework.
